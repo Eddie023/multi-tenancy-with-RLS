@@ -1,0 +1,32 @@
+services:
+  db: 
+    image: postgres:17-bookworm
+    container_name: pg_db
+    restart: always 
+    environment:
+      - POSTGRES_USER=root 
+      - POSTGRES_DB=root_db
+      - POSTGRES_PASSWORD=test
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./docker-initdb:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD_SHELL", "pg_isready -U root"]
+      interval: 10s
+      timeout: 5s
+      retries: 5 
+  
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    depends_on:
+      - db 
+    ports:
+      - 5050:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=test@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=test
+
+volumes:
+  pg_data: 
