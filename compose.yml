@@ -1,7 +1,6 @@
 services:
-  db: 
+  pgdb: 
     image: postgres:17-bookworm
-    container_name: pg_db
     restart: always 
     environment:
       - POSTGRES_USER=root 
@@ -13,20 +12,25 @@ services:
     ports:
       - 5432:5432
     healthcheck:
-      test: ["CMD_SHELL", "pg_isready -U root"]
-      interval: 10s
+      test: ["CMD-SHELL", "pg_isready -U dev"]
+      interval: 30s
       timeout: 5s
-      retries: 5 
-  
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    depends_on:
-      - db 
-    ports:
-      - 5050:80
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=test@gmail.com
-      - PGADMIN_DEFAULT_PASSWORD=test
+      retries: 5
+      start_period: 10s
 
+  api:
+    container_name: apiserver
+    restart: always
+    build: . 
+    ports: 
+      - 8848:8848
+    volumes:
+      - .:/go/src/server
+    environment:
+      - DB_CONNECTION_URI=postgres://dev:pass@pgdb:5432/root_db?sslmode=disable
+    depends_on:
+      pgdb: 
+        condition: service_healthy
+  
 volumes:
   pg_data: 

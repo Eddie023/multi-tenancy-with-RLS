@@ -11,4 +11,3 @@ CREATE SCHEMA app AUTHORIZATION dev;
 Make the default schema as app when logged via dev user. 
 **/
 ALTER ROLE dev SET search_path TO app, public; 
-
