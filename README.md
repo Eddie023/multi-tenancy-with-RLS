@@ -1,5 +1,5 @@
 # multi-tenancy-with-RLS
-This is an example repository of achieving Multi-Tenancy in Golang using Row Level Security (RLS) in Postgres. Companion article: [rls](eddie023.github.io/post/rls). 
+This is an example repository of achieving Multi-Tenancy in Golang using Row Level Security (RLS) in Postgres. Companion article: [multi-tenancy-with-rls](https://eddie023.github.io/posts/multi-tenancy-with-rls/). 
 
 # Overview 
 1. `docker-initdb` contains all the necessary SQL commands required to initialize our containarized database.
