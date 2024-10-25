@@ -1,11 +1,13 @@
 # multi-tenancy-with-RLS
-Demonstration of Multi-Tenant SaaS application using Row Level Security in Postgres. 
-
-This is an example repository of achieving Multi-Tenancy in Golang using Row Level Security (RLS) for article [rls](eddie023.github.io/post/rls). 
+This is an example repository of achieving Multi-Tenancy in Golang using Row Level Security (RLS) in Postgres. Companion article: [rls](eddie023.github.io/post/rls). 
 
 # Overview 
-1. All the necessary database SQL queries such as creating tables, inserting seeds, and creating a 'dev' role are done via database initialization script.
-2. Use config.beforeAcquire and config.AfterRelease to set/reset tenant_id configuration parameter in the DB. 
+1. `docker-initdb` contains all the necessary SQL commands required to initialize our containarized database.
+2. For demonstration purposes, `tenantId` is dynamically set via query param and updated via request context. 
+3. While configuring the database connection, we are dynamically setting the `app.current_tenant` configuration paramter using `set_tenant` SQL function using `BeforeAcquire` hook from pgx library. 
+4. Similarily, we will reset the tenantId using `AfterRelease` hook. 
 
-# Running the app 
-1. Run `docker compose up`
+# Running the application
+1. Run `docker compose up` 
+2. Wait few seconds for `apiserver` to be live as it waits until database is intialized. 
+3. Run `curl -X GET http://localhost:8848/products\?tenantId=<1|2>` to dynamically set the tenantId values.  

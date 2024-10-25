@@ -6,7 +6,7 @@ COPY go.mod go.sum ./
 RUN go mod download 
 
 ADD . .
-RUN go install ./cmd/main.go
+RUN go install main.go
 
 FROM debian:bookworm
 ARG VERSION 
